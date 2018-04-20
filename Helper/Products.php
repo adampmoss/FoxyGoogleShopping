@@ -19,24 +19,47 @@ class Products extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_helper;
 
+    /**
+    * @var \Magento\Store\Model\StoreManagerInterface
+    */
+    public $_storeManager;
+
+    /**
+    * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
+    */
+    public $_productStatus;
+
+    /**
+    * @var \Magento\Catalog\Model\Product\Visibility
+    */
+    public $_productVisibility;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Eav\Model\AttributeSetRepository $attributeSetRepo,
-        \Magefox\GoogleShopping\Helper\Data $helper
+        \Magefox\GoogleShopping\Helper\Data $helper,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
+        \Magento\Catalog\Model\Product\Visibility $productVisibility
     )
     {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_attributeSetRepo = $attributeSetRepo;
         $this->_helper = $helper;
+        $this->_storeManager = $storeManager;
+        $this->_productStatus = $productStatus;
+        $this->_productVisibility = $productVisibility;
         parent::__construct($context);
     }
 
     public function getFilteredProducts()
     {
         $collection = $this->_productCollectionFactory->create();
-        $collection->addAttributeToSelect('*');
-        $collection->setPageSize(200);
+        // $collection->addAttributeToFilter('status',\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $collection->addAttributeToFilter('status', ['in' => $this->_productStatus->getVisibleStatusIds()]);
+        $collection->setVisibility($this->_productVisibility->getVisibleInSiteIds());
+
         return $collection;
     }
 
@@ -65,5 +88,10 @@ class Products extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return false;
+    }
+
+    public function getCurrentCurrencySymbol()
+    {
+        return $this->_storeManager->getStore()->getCurrentCurrencyCode();
     }
 }

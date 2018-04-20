@@ -29,6 +29,25 @@
                     <label>Google Shopping Category</label>
                     <comment>Attribute code used for Google Shopping Category</comment>
                 </field>
+                <field id="google_default_title" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                    <label>Title on Google Tittle Tag</label>
+                </field>
+                <field id="google_default_url" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                    <label>Url on Google link Tag</label>
+                    <comment>Should use http:// or https://</comment>
+                </field>
+                <field id="google_default_description" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                    <label>Description on Google Description Tag</label>
+                </field>
             </group>
         </section>
     </system>
