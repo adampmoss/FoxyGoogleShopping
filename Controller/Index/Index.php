@@ -2,41 +2,55 @@
 
 namespace Magefox\GoogleShopping\Controller\Index;
 
-class Index extends \Magento\Framework\App\Action\Action
+use Magefox\GoogleShopping\Helper\Data;
+use Magefox\GoogleShopping\Model\Xmlfeed;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\ForwardFactory;
+
+class Index extends Action
 {
     /**
      * XmlFeed Model
      *
-     * @var \Magefox\GoogleShopping\Model\Xmlfeed
+     * @var Xmlfeed
      */
     protected $xmlFeed;
 
     /**
      * General Helper
      *
-     * @var \Magefox\GoogleShopping\Helper\Data
+     * @var Data
      */
     private $helper;
 
     /**
      * Result Forward Factory
      *
-     * @var \Magefox\GoogleShopping\Helper\Data
+     * @var Data
      */
     private $resultForward;
 
+    /**
+     * Index constructor.
+     * @param Context $context
+     * @param Xmlfeed $xmlFeed
+     * @param Data $helper
+     * @param ForwardFactory $resultForwardFactory
+     */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magefox\GoogleShopping\Model\Xmlfeed $xmlFeed,
-        \Magefox\GoogleShopping\Helper\Data $helper,
-        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
-    ) {
+        Context $context,
+        Xmlfeed $xmlFeed,
+        Data $helper,
+        ForwardFactory $resultForwardFactory
+    )
+    {
         $this->xmlFeed = $xmlFeed;
         $this->helper = $helper;
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
-    
+
     public function execute()
     {
         $resultForward = $this->resultForwardFactory->create();
@@ -47,4 +61,5 @@ class Index extends \Magento\Framework\App\Action\Action
             $resultForward->forward('noroute');
         }
     }
+
 }
